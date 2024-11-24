@@ -7,16 +7,6 @@
         <a href="{{ url_for('main.add_password') }}" class="btn btn-primary">Add New Password</a>
     </div>
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="alerts">
-        {% for message in messages %}
-        <div class="alert">{{ message }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
-
     <div class="passwords-container">
         {% if passwords %}
         <div class="passwords-grid">

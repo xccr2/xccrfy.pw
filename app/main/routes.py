@@ -23,7 +23,7 @@ def add_password():
         notes = request.form.get('notes')
         
         if not all([website, username, password]):
-            flash('Please fill in all required fields')
+            flash('Please fill in all required fields', 'error')
             return redirect(url_for('main.add_password'))
         
         # Encrypt the password using the user's master key
@@ -45,7 +45,7 @@ def add_password():
         db.session.add(password_entry)
         db.session.commit()
         
-        flash('Password added successfully')
+        flash('Password added successfully', 'success')
         return redirect(url_for('main.index'))
         
     return render_template('main/add_password.html')
@@ -73,7 +73,7 @@ def edit_password(id):
     password_entry = Password.query.get_or_404(id)
     
     if password_entry.user_id != current_user.id:
-        flash('Unauthorized access')
+        flash('Unauthorized access', 'error')
         return redirect(url_for('main.index'))
     
     if request.method == 'POST':
@@ -83,7 +83,7 @@ def edit_password(id):
         notes = request.form.get('notes')
         
         if not all([website, username]):
-            flash('Please fill in all required fields')
+            flash('Please fill in all required fields', 'error')
             return redirect(url_for('main.edit_password', id=id))
         
         password_entry.website = website
@@ -96,7 +96,7 @@ def edit_password(id):
             password_entry.password_strength = calculate_password_strength(password)
         
         db.session.commit()
-        flash('Password updated successfully')
+        flash('Password updated successfully', 'success')
         return redirect(url_for('main.index'))
         
     return render_template('main/edit_password.html', password=password_entry)
@@ -106,12 +106,12 @@ def edit_password(id):
 def delete_password(id):
     password = Password.query.get_or_404(id)
     if password.user_id != current_user.id:
-        flash('Access denied')
+        flash('Access denied', 'error')
         return redirect(url_for('main.index'))
     
     db.session.delete(password)
     db.session.commit()
-    flash('Password deleted successfully')
+    flash('Password deleted successfully', 'success')
     return redirect(url_for('main.index'))
 
 def calculate_password_strength(password):

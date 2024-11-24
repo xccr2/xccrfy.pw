@@ -11,6 +11,7 @@
             --primary-color: #2563eb;
             --secondary-color: #1e40af;
             --danger-color: #dc2626;
+            --success-color: #16a34a;
             --background-color: #f3f4f6;
             --card-background: #ffffff;
             --text-color: #1f2937;
@@ -20,8 +21,10 @@
             --input-focus-border: #2563eb;
             --input-focus-shadow: rgba(37, 99, 235, 0.1);
             --navbar-background: #ffffff;
-            --alert-background: #fef2f2;
-            --alert-text: #991b1b;
+            --alert-success-bg: #dcfce7;
+            --alert-success-text: #166534;
+            --alert-error-bg: #fef2f2;
+            --alert-error-text: #991b1b;
             --hover-background: #f3f4f6;
         }
 
@@ -29,6 +32,7 @@
             --primary-color: #3b82f6;
             --secondary-color: #60a5fa;
             --danger-color: #ef4444;
+            --success-color: #22c55e;
             --background-color: #1f2937;
             --card-background: #111827;
             --text-color: #f3f4f6;
@@ -38,8 +42,10 @@
             --input-focus-border: #3b82f6;
             --input-focus-shadow: rgba(59, 130, 246, 0.1);
             --navbar-background: #111827;
-            --alert-background: #7f1d1d;
-            --alert-text: #fecaca;
+            --alert-success-bg: #064e3b;
+            --alert-success-text: #a7f3d0;
+            --alert-error-bg: #7f1d1d;
+            --alert-error-text: #fecaca;
             --hover-background: #374151;
         }
 
@@ -55,12 +61,16 @@
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--background-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            flex: 1;
         }
 
         .header {
@@ -234,17 +244,30 @@
 
         .alert {
             padding: 1rem;
-            border-radius: 0.5rem;
-            background-color: var(--alert-background);
-            color: var(--alert-text);
             margin-bottom: 1rem;
-            border: 1px solid var(--alert-text);
-            animation: slideIn 0.5s ease-out;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .alert-success {
+            background-color: var(--alert-success-bg);
+            color: var(--alert-success-text);
+            border: 1px solid var(--success-color);
+        }
+
+        .alert-error {
+            background-color: var(--alert-error-bg);
+            color: var(--alert-error-text);
+            border: 1px solid var(--danger-color);
         }
 
         @keyframes slideIn {
             from {
-                transform: translateY(-20px);
+                transform: translateY(-100%);
                 opacity: 0;
             }
             to {
@@ -346,6 +369,261 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        /* Auth Pages Styling */
+        .auth-container {
+            min-height: calc(100vh - 180px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: var(--card-background);
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .auth-header {
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .auth-subtitle {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        .auth-body {
+            padding: 1rem 2rem 2rem;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-form .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .auth-form .input-group {
+            display: flex;
+            border: 2px solid var(--input-border);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .auth-form .input-group:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+
+        .auth-form .input-group-text {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: var(--card-background);
+            border: none;
+            color: var(--text-color);
+        }
+
+        .auth-form .form-control {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background-color: var(--card-background);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .auth-form .form-control::placeholder {
+            color: var(--text-color);
+            opacity: 0.5;
+        }
+
+        .auth-form .form-control:focus {
+            outline: none;
+        }
+
+        .auth-form .btn-outline-secondary {
+            border: none;
+            background: none;
+            color: var(--text-color);
+            padding: 0 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .auth-form .btn-outline-secondary:hover {
+            color: var(--primary-color);
+        }
+
+        .remember-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .form-check-input {
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 2px solid var(--input-border);
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .auth-submit {
+            width: 100%;
+            padding: 0.875rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .auth-submit:hover {
+            transform: translateY(-2px);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .auth-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .auth-link:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        /* Password Requirements Styling */
+        .password-requirements {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: var(--card-background);
+            border: 1px solid var(--border-color);
+        }
+
+        .requirements-title {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .requirements-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 0.875rem;
+            padding: 0.25rem 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .requirements-list li i {
+            width: 1rem;
+            text-align: center;
+        }
+
+        .requirements-list li.requirement-met {
+            opacity: 1;
+        }
+
+        .text-success {
+            color: var(--success-color) !important;
+        }
+
+        .text-danger {
+            color: var(--danger-color) !important;
+        }
+
+        /* Additional Auth Form Improvements */
+        .auth-form .form-group:last-of-type {
+            margin-bottom: 2rem;
+        }
+
+        .auth-form .input-group:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+
+        .auth-form .form-control::placeholder {
+            color: var(--text-color);
+            opacity: 0.5;
+        }
+
+        .auth-card {
+            transform: translateY(0);
+            opacity: 1;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -385,10 +663,10 @@
     </nav>
 
     <div class="container">
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for message in messages %}
-                    <div class="alert">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
                         {{ message }}
                     </div>
                 {% endfor %}
