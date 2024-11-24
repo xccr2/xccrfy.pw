@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}xccrfy.pw{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root[data-theme="light"] {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --danger-color: #dc2626;
+            --background-color: #f3f4f6;
+            --card-background: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --input-background: #ffffff;
+            --input-border: #d1d5db;
+            --input-focus-border: #2563eb;
+            --input-focus-shadow: rgba(37, 99, 235, 0.1);
+            --navbar-background: #ffffff;
+            --alert-background: #fef2f2;
+            --alert-text: #991b1b;
+            --hover-background: #f3f4f6;
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #3b82f6;
+            --secondary-color: #60a5fa;
+            --danger-color: #ef4444;
+            --background-color: #1f2937;
+            --card-background: #111827;
+            --text-color: #f3f4f6;
+            --border-color: #374151;
+            --input-background: #111827;
+            --input-border: #374151;
+            --input-focus-border: #3b82f6;
+            --input-focus-shadow: rgba(59, 130, 246, 0.1);
+            --navbar-background: #111827;
+            --alert-background: #7f1d1d;
+            --alert-text: #fecaca;
+            --hover-background: #374151;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .nav-brand {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(45deg, 
+                var(--text-color) 30%, 
+                var(--primary-color) 50%, 
+                var(--text-color) 70%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+
+        .nav-brand:hover {
+            transform: scale(1.02) translateZ(10px);
+            background-position: right center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px) translateZ(5px);
+        }
+
+        .btn:hover::after {
+            transform: translateX(50%);
+        }
+
+        .btn-primary {
+            background: linear-gradient(
+                45deg,
+                var(--primary-color) 30%,
+                var(--secondary-color) 70%
+            );
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background-color: var(--card-background);
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--hover-background);
+            border-color: var(--input-focus-border);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+            border-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+            border-color: #b91c1c;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.625rem;
+            border: 2px solid var(--input-border);
+            border-radius: 0.5rem;
+            background-color: var(--input-background);
+            color: var(--text-color);
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 4px var(--input-focus-shadow);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .navbar {
+            background-color: var(--navbar-background);
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: var(--alert-background);
+            color: var(--alert-text);
+            margin-bottom: 1rem;
+            border: 1px solid var(--alert-text);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            margin-left: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(10deg);
+            background-color: rgba(var(--primary-color-rgb), 0.1);
+        }
+
+        .theme-toggle i {
+            transition: all 0.4s ease;
+        }
+
+        .theme-toggle:hover i {
+            transform: scale(1.1);
+        }
+
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.4s ease-out;
+            transform: perspective(1000px);
+            will-change: transform;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.1),
+                0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Stars animation */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: var(--text-color);
+            border-radius: 50%;
+            animation: fall linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Password card styles */
+        .password-card {
+            background-color: var(--card-background);
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .password-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('main.index') }}" class="nav-brand">
+                <i class="fas fa-shield-alt"></i> xccrfy.pw
+            </a>
+            <div class="nav-links">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.index') }}" class="nav-link">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="{{ url_for('main.add_password') }}" class="nav-link">
+                    <i class="fas fa-plus"></i> Add Password
+                </a>
+                <form action="{{ url_for('auth.logout') }}" method="POST" style="display: inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}" class="nav-link">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+                {% endif %}
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const themeIcon = document.querySelector('.theme-toggle i');
+            themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // Set initial theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const themeIcon = document.querySelector('.theme-toggle i');
+            themeIcon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        });
+
+        // CSRF token handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            const originalFetch = window.fetch;
+            window.fetch = function() {
+                let [resource, config] = arguments;
+                if(config === undefined) {
+                    config = {};
+                }
+                if(config.method === 'POST') {
+                    if(config.headers === undefined) {
+                        config.headers = {};
+                    }
+                    config.headers['X-CSRFToken'] = csrfToken;
+                }
+                return originalFetch(resource, config);
+            };
+        });
+
+        // Create falling stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 50;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                
+                // Random size
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random duration
+                const duration = 3 + Math.random() * 7;
+                star.style.animation = `fall ${duration}s linear ${Math.random() * 5}s infinite`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Initialize stars
+        document.addEventListener('DOMContentLoaded', createStars);
+
+        // Add 3D tilt effect to cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.password-card');
+            cards.forEach(card => {
+                card.classList.add('card-3d');
+                
+                card.addEventListener('mousemove', function(e) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    // Reduce rotation sensitivity
+                    const rotateX = ((y - centerY) / 40) * -1; 
+                    const rotateY = (x - centerX) / 40; 
+                    
+                    // Limit maximum rotation angle
+                    const maxRotation = 1.5; 
+                    const limitedRotateX = Math.max(Math.min(rotateX, maxRotation), -maxRotation);
+                    const limitedRotateY = Math.max(Math.min(rotateY, maxRotation), -maxRotation);
+                    
+                    card.style.transform = `
+                        perspective(1000px)
+                        rotateX(${limitedRotateX}deg)
+                        rotateY(${limitedRotateY}deg)
+                        translateZ(5px)
+                        translateY(-3px)
+                    `;
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    card.style.transform = 'perspective(1000px) translateZ(0)';
+                });
+            });
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

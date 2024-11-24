@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}MFA Setup{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Setup Two-Factor Authentication</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ qr_uri|urlencode }}"
+                         alt="MFA QR Code" class="img-fluid">
+                </div>
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle me-2"></i>Setup Instructions:</h5>
+                    <ol class="mb-0">
+                        <li>Install an authenticator app (like Google Authenticator) on your phone</li>
+                        <li>Scan the QR code above with your authenticator app</li>
+                        <li>Enter the 6-digit code from your authenticator app below</li>
+                    </ol>
+                </div>
+                <form method="POST" action="{{ url_for('auth.mfa_setup') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="token" class="form-label">Verification Code</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            <input type="text" class="form-control" id="token" name="token" 
+                                   required pattern="[0-9]{6}" maxlength="6"
+                                   placeholder="Enter 6-digit code">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-check me-2"></i>Verify and Enable MFA
+                    </button>
+                </form>
+                <hr>
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-exclamation-triangle me-2"></i>Important:</h5>
+                    <p class="mb-0">Store your backup codes in a safe place. If you lose access to your authenticator app, you'll need these codes to regain access to your account.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

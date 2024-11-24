@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}MFA Verification{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Two-Factor Authentication</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Please enter the 6-digit code from your authenticator app.
+                </div>
+                <form method="POST" action="{{ url_for('auth.mfa_verify') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="token" class="form-label">Verification Code</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            <input type="text" class="form-control" id="token" name="token" 
+                                   required pattern="[0-9]{6}" maxlength="6" autofocus
+                                   placeholder="Enter 6-digit code">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-check me-2"></i>Verify
+                    </button>
+                </form>
+                <hr>
+                <div class="text-center">
+                    <p class="mb-0">Lost access to your authenticator app? <a href="#">Use backup code</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('token').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 6) value = value.slice(0, 6);
+    e.target.value = value;
+});
+</script>
+{% endblock %}
